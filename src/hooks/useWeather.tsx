@@ -17,7 +17,7 @@ const useWeather = (
         const fetchData = async () => {
             setIsLoading(true);
             const response = await axios.get<WeatherFields>(
-                `http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude={current,minutely,hourly,alerts}&units=metric&appid=${process.env.REACT_APP_OPENWEATHER}`,
+                `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude={current,minutely,hourly,alerts}&units=metric&appid=${process.env.REACT_APP_OPENWEATHER}`,
             );
             setWeatherData(response.data);
             setIsLoading(false);
