@@ -22,7 +22,7 @@ const App = (): JSX.Element => {
     const [location, setLocation] = React.useState<Coordinates | undefined>(undefined);
     const locationNames = ['Edmonton', 'The Hague', 'Nashville'];
     const [currentLocationName, setCurrentLocationName] = React.useState<string>(locationNames[0]);
-    const { weatherData } = useWeather(location?.latitude, location?.longitude);
+    const { weatherData, isLoading } = useWeather(location?.latitude, location?.longitude);
     const { coordinateData } = useCoordinates(currentLocationName);
 
     React.useEffect(() => {
@@ -75,7 +75,7 @@ const App = (): JSX.Element => {
                         '0px 3px 5px rgb(0 0 0 / 8%), 0px 6px 10px rgb(0 0 0 / 8%), 0px 12px 20px rgb(0 0 0 / 8%)',
                 }}
             >
-                {weatherData ? (
+                {weatherData && !isLoading ? (
                     <>
                         <Grid container>
                             <Grid item xs={12} md={12}>
