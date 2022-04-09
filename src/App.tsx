@@ -13,7 +13,7 @@ import MiniWeatherCard from './components/MiniWeatherCard';
 import { useCoordinates } from './hooks/useForwardGeolocation';
 import { useWeather } from './hooks/useWeather';
 
-import { ConvertToDay } from './utilities/ConvertDate';
+import { ConvertToDay } from './utilities/convertDate';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
