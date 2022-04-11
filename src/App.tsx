@@ -20,11 +20,13 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const App = (): JSX.Element => {
     const [location, setLocation] = React.useState<Coordinates | undefined>(undefined);
-    const locationNames = ['Edmonton', 'The Hague', 'Nashville'];
+    const locationNames: Array<string> = ['Edmonton', 'The Hague', 'Nashville'];
     const [currentLocationName, setCurrentLocationName] = React.useState<string>(locationNames[0]);
     const { weatherData, isLoading } = useWeather(location?.latitude, location?.longitude);
     const { coordinateData } = useCoordinates(currentLocationName);
 
+    // Takes the name of the first item in the locationNames array
+    // and then attempts to get the coordinates from the Mapbox result
     React.useEffect(() => {
         if (coordinateData) {
             coordinateData.features.forEach((feature: Features) => {
@@ -38,6 +40,8 @@ const App = (): JSX.Element => {
         }
     }, [coordinateData]);
 
+    // Gets the weather and adjusts the data so that we're
+    // only getting the next 4 days instead of the next 7.
     React.useEffect(() => {
         if (weatherData) {
             weatherData?.daily.shift();
