@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Box, Grid } from '@mui/material';
+import { Container, Box, Grid, Typography } from '@mui/material';
 
 import { Coordinates } from './models/coordinates';
 import { Features } from './models/placesFields';
@@ -16,14 +16,24 @@ import { useWeather } from './hooks/useWeather';
 import { ConvertToDay } from './utilities/convertDate';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const App = (): JSX.Element => {
     const [location, setLocation] = React.useState<Coordinates | undefined>(undefined);
     const locationNames: Array<string> = ['Edmonton', 'The Hague', 'Nashville'];
     const [currentLocationName, setCurrentLocationName] = React.useState<string>(locationNames[0]);
-    const { weatherData, isLoading } = useWeather(location?.latitude, location?.longitude);
-    const { coordinateData } = useCoordinates(currentLocationName);
+    const {
+        weatherData,
+        isLoading: isWeatherLoading,
+        isError: isWeatherError,
+        errorMessage: weatherErrorMessage,
+    } = useWeather(location?.latitude, location?.longitude);
+    const {
+        coordinateData,
+        isLoading: isCoordinatesLoading,
+        isError: isCoordinatesError,
+        errorMessage: coordinatesErrorMessage,
+    } = useCoordinates(currentLocationName);
 
     // Takes the name of the first item in the locationNames array
     // and then attempts to get the coordinates from the Mapbox result
@@ -43,7 +53,7 @@ const App = (): JSX.Element => {
     // Gets the weather and adjusts the data so that we're
     // only getting the next 4 days instead of the next 7.
     React.useEffect(() => {
-        if (weatherData) {
+        if (!isCoordinatesError && weatherData) {
             weatherData?.daily.shift();
             weatherData?.daily.splice(4, 4);
         }
@@ -79,7 +89,7 @@ const App = (): JSX.Element => {
                         '0px 3px 5px rgb(0 0 0 / 8%), 0px 6px 10px rgb(0 0 0 / 8%), 0px 12px 20px rgb(0 0 0 / 8%)',
                 }}
             >
-                {weatherData && !isLoading ? (
+                {weatherData && !isWeatherLoading && (
                     <>
                         <Grid container>
                             <Grid item xs={12} md={12}>
@@ -117,9 +127,27 @@ const App = (): JSX.Element => {
                             </Container>
                         </Grid>
                     </>
-                ) : (
-                    <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <FontAwesomeIcon spin={true} color="#5FB0E8" size="5x" icon={faSpinner} />
+                )}
+                {(isCoordinatesLoading && !isCoordinatesError) ||
+                    (isWeatherLoading && !isWeatherError && (
+                        <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <FontAwesomeIcon spin={true} color="#5FB0E8" size="5x" icon={faSpinner} />
+                        </Container>
+                    ))}
+                {(!isCoordinatesLoading || !isWeatherLoading) && (isCoordinatesError || isWeatherError) && (
+                    <Container
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexDirection: 'column',
+                        }}
+                    >
+                        <FontAwesomeIcon color="#5FB0E8" size="5x" icon={faExclamationTriangle} />
+                        <Typography sx={{ pt: 3 }} variant="cardBig" textAlign="center">
+                            {isCoordinatesError && coordinatesErrorMessage}
+                            {isWeatherError && weatherErrorMessage}
+                        </Typography>
                     </Container>
                 )}
             </Container>
