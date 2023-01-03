@@ -13,10 +13,14 @@ const WeatherIcon = ({ image, size }: { image: string | undefined; size: SizePro
             case 'Thunderstorm':
                 setWeatherImage({ icon: faBolt, color: '#5FB0E8' });
                 break;
-            case 'Clouds' || 'Scattered Clouds' || 'Broken Clouds' || 'Few Clouds':
+            case 'Clouds':
+            case 'Scattered Clouds':
+            case 'Broken Clouds':
+            case 'Few Clouds':
                 setWeatherImage({ icon: faCloud, color: '#5FB0E8' });
                 break;
-            case 'Rain' || 'Shower Rain':
+            case 'Rain':
+            case 'Shower Rain':
                 setWeatherImage({ icon: faCloudRain, color: '#5FB0E8' });
                 break;
             case 'Clear':
@@ -25,6 +29,7 @@ const WeatherIcon = ({ image, size }: { image: string | undefined; size: SizePro
             case 'Snow':
                 setWeatherImage({ icon: faSnowflake, color: '#5FB0E8' });
                 break;
+            case 'Fog':
             case 'Mist':
                 setWeatherImage({ icon: faSmog, color: '#5FB0E8' });
                 break;
