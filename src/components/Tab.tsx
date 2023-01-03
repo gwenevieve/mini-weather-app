@@ -25,6 +25,9 @@ const Tab = ({
                 '&:focus': {
                     border: '2px solid #5fb0e8',
                 },
+                '&:hover': {
+                    backgroundColor: '#5fb0e830',
+                },
             }}
             onClick={() => {
                 setCurrentLocationName(cityName);

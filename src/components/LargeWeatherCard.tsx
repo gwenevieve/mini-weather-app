@@ -2,11 +2,19 @@ import React from 'react';
 
 import { Box, Card, Typography } from '@mui/material';
 
+import { convertToFarenheit } from '../utilities/convertTemperature';
+
 import { WeatherFields } from '../models/weather';
 
-import Icon from './WeatherIcon';
+import Icon from './weatherIcon';
 
-const LargeWeatherCard = ({ weatherData }: { weatherData?: WeatherFields }): JSX.Element => {
+const LargeWeatherCard = ({
+    weatherData,
+    temperatureUnit,
+}: {
+    weatherData?: WeatherFields;
+    temperatureUnit: string;
+}): JSX.Element => {
     const [currentWeatherIcon, setCurrentWeatherIcon] = React.useState<string>();
     const [currentTemp, setCurrentTemp] = React.useState<number>();
     const [currentConditions, setCurrentConditions] = React.useState<string>('');
@@ -37,7 +45,11 @@ const LargeWeatherCard = ({ weatherData }: { weatherData?: WeatherFields }): JSX
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Icon size="6x" image={currentWeatherIcon} />
                 <Box sx={{ flexDirection: 'column', display: 'flex', pl: 2 }}>
-                    <Typography variant="tempBig">{`${currentTemp ? Math.round(currentTemp) : ''}°`}</Typography>
+                    <Typography variant="tempBig">{`${
+                        temperatureUnit === 'F'
+                            ? convertToFarenheit(Math.round(currentTemp as number))
+                            : Math.round(currentTemp as number)
+                    }°`}</Typography>
                     <Typography variant="cardBig">{currentConditions}</Typography>
                 </Box>
             </Box>

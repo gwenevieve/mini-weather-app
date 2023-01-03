@@ -1,8 +1,19 @@
 import { Card, Typography } from '@mui/material';
+import { convertToFarenheit } from '../utilities/convertTemperature';
 
-import Icon from './WeatherIcon';
+import Icon from './weatherIcon';
 
-const MiniWeatherCard = ({ day, icon, temp }: { day: string; icon: string; temp: number }): JSX.Element => {
+const MiniWeatherCard = ({
+    day,
+    icon,
+    temp,
+    temperatureUnit,
+}: {
+    day: string;
+    icon: string;
+    temp: number;
+    temperatureUnit: string;
+}): JSX.Element => {
     return (
         <Card
             sx={{
@@ -21,7 +32,9 @@ const MiniWeatherCard = ({ day, icon, temp }: { day: string; icon: string; temp:
                 {day}
             </Typography>
             <Icon size="3x" image={icon} />
-            <Typography sx={{ pt: 2 }} variant="tempSmall">{`${temp}°`}</Typography>
+            <Typography sx={{ pt: 2 }} variant="tempSmall">{`${
+                temperatureUnit === 'F' ? convertToFarenheit(temp) : temp
+            }°`}</Typography>
         </Card>
     );
 };

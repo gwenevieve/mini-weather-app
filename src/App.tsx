@@ -6,14 +6,15 @@ import { Coordinates } from './models/coordinates';
 import { Features } from './models/placesFields';
 import { WeatherDetails } from './models/weather';
 
-import Tab from './components/Tab';
-import LargeWeatherCard from './components/LargeWeatherCard';
-import MiniWeatherCard from './components/MiniWeatherCard';
+import Tab from './components/tab';
+import LargeWeatherCard from './components/largeWeatherCard';
+import MiniWeatherCard from './components/miniWeatherCard';
+import TemperatureToggle from './components/temperatureToggle';
 
 import { useCoordinates } from './hooks/useForwardGeolocation';
 import { useWeather } from './hooks/useWeather';
 
-import { ConvertToDay } from './utilities/convertDate';
+import { convertToDay } from './utilities/convertDate';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -22,6 +23,7 @@ const App = (): JSX.Element => {
     const [location, setLocation] = React.useState<Coordinates | undefined>(undefined);
     const locationNames: Array<string> = ['Edmonton', 'The Hague', 'Nashville'];
     const [currentLocationName, setCurrentLocationName] = React.useState<string>(locationNames[0]);
+    const [temperatureUnit, setTemperatureUnit] = React.useState<string>('C');
     const {
         weatherData,
         isLoading: isWeatherLoading,
@@ -92,8 +94,12 @@ const App = (): JSX.Element => {
                 {weatherData && !isWeatherLoading && (
                     <>
                         <Grid container>
+                            <TemperatureToggle
+                                temperatureUnit={temperatureUnit}
+                                setTemperatureUnit={setTemperatureUnit}
+                            />
                             <Grid item xs={12} md={12}>
-                                <LargeWeatherCard weatherData={weatherData} />
+                                <LargeWeatherCard temperatureUnit={temperatureUnit} weatherData={weatherData} />
                             </Grid>
                             <Container disableGutters maxWidth="sm">
                                 <Grid item xs={12} md={12}>
@@ -114,8 +120,9 @@ const App = (): JSX.Element => {
                                                     }}
                                                 >
                                                     <MiniWeatherCard
+                                                        temperatureUnit={temperatureUnit}
                                                         key={element.dt}
-                                                        day={ConvertToDay(element.dt).substring(0, 3)}
+                                                        day={convertToDay(element.dt).substring(0, 3)}
                                                         icon={element?.weather[0].main}
                                                         temp={Math.round(element.temp.day)}
                                                     />
